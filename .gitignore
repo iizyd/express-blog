@@ -6,3 +6,4 @@ dist-ssr
 .eslintcache
 .idea
 .vscode
+yarn-error.log
