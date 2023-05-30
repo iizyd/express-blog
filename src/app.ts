@@ -3,7 +3,7 @@ import 'reflect-metadata'
 import bodyParser from 'body-parser'
 import apiRouter from './routes/router'
 import { errorResponse } from './common/response'
-import './util/db'
+import './common/db'
 
 const app: Application = express()
 const port = 9000

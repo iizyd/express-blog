@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import ArticleController from '../controllers/article.controller'
-import validMiddleware from '../util/validate'
+import validMiddleware from '../middleware/validate.middleware'
 import { CreateArticleDto } from '../dto/article.dto'
 
 const router = Router()

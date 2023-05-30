@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import db from '../util/db'
+import db from '../common/db'
 import { successResponse } from '../common/response'
 import { CreateArticleDto } from '../dto/article.dto'
 
