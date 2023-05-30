@@ -8,7 +8,9 @@
         "strict": true,
         "moduleResolution": "node",
         "resolveJsonModule": true,
-        "declaration": false
+        "declaration": false,
+        "experimentalDecorators": true,
+        "strictPropertyInitialization": false
     },
     "include": [
         "src/**/*"
