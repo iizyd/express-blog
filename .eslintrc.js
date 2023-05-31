@@ -17,6 +17,7 @@ module.exports = {
 	},
 	plugins: ['@typescript-eslint', 'prettier'],
 	rules: {
-		'prettier/prettier': 'error' // 对于不符合prettier报eslint错误
+		'prettier/prettier': 'error', // 对于不符合prettier报eslint错误
+		camelcase: 'off'
 	}
 }

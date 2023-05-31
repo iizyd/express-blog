@@ -1,5 +1,5 @@
 import { Response } from 'express'
-import { RESPONSE_CODE } from './code'
+import { RESPONSE_CODE, ResponseCodeValue } from './code'
 
 interface ResponseData {
 	code: number
@@ -7,16 +7,24 @@ interface ResponseData {
 	data: any
 }
 
-export const successResponse = (res: Response, data: any, code = RESPONSE_CODE.SUCCESS): void => {
-	const responseData: ResponseData = { code, msg: '成功', data }
-	res.status(code).json(responseData)
+export const successResponse = (
+	res: Response,
+	data: any,
+	codeValue: ResponseCodeValue = RESPONSE_CODE.SUCCESS
+): void => {
+	const responseData: ResponseData = { code: codeValue.code, msg: codeValue.msg, data }
+	res.status(codeValue.code).json(responseData)
 }
 
 export const errorResponse = (
 	res: Response,
-	code = RESPONSE_CODE.INTERNAL_SERVER_ERROR,
-	msg = '失败'
+	codeValue: ResponseCodeValue = RESPONSE_CODE.INTERNAL_SERVER_ERROR,
+	msg = ''
 ): void => {
-	const responseData: ResponseData = { code, msg, data: null }
-	res.status(code).json(responseData)
+	const responseData: ResponseData = {
+		code: codeValue.code,
+		msg: msg || codeValue.msg,
+		data: null
+	}
+	res.status(codeValue.code).json(responseData)
 }
