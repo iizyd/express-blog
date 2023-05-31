@@ -19,7 +19,4 @@ export class CreateArticleDto {
 	@IsNumber()
 	@IsIn([0, 1])
 	state: number
-
-	@IsNumber()
-	tag_id: number
 }
