@@ -1316,3 +1316,61 @@ src/
 同时，我们在工具函数和通用代码文件夹中添加了一些常见的功能模块，如日志记录和数据验证等，方便代码复用和维护。
 
 希望这个版本的目录结构对您更加有帮助，如果还有其他问题，请随时提出。
+
+## 维护关联表
+如果不使用外键，你可以考虑如下的代码实现。
+
+1. 首先，你需要通过 Prisma API 查询出要添加标签的文章：
+
+```typescript
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+
+async function addTagsToArticle(articleId: number, tagIds: number[]): Promise<void> {
+  const article = await prisma.blogArticle.findUnique({ where: { id: articleId } });
+  if (!article) {
+    throw new Error(`Article with ID ${articleId} not found`);
+  }
+
+  console.log(`Adding tags [${tagIds.join(', ')}] to article with ID ${articleId}`);
+}
+```
+
+在上面的代码中，我们使用 Prisma 的 `findUnique` 方法查询出要添加标签的文章。由于没有外键约束，我们并不能直接从 `blog_article_tag` 表中查询与文章关联的标签，而是需要在应用层手动管理标签与文章之间的关系。
+
+2. 然后，我们可以在 `addTagsToArticle` 函数中通过查询出所有待添加的标签，并将它们插入到 `blog_article_tag` 表中，从而与文章进行关联：
+
+```typescript
+async function addTagsToArticle(articleId: number, tagIds: number[]): Promise<void> {
+  const article = await prisma.blogArticle.findUnique({ where: { id: articleId } });
+  if (!article) {
+    throw new Error(`Article with ID ${articleId} not found`);
+  }
+
+  const tags = await prisma.blogTag.findMany({ where: { id: { in: tagIds } } });
+  if (tags.length === 0) {
+    throw new Error(`No tags with IDs [${tagIds.join(', ')}] found`);
+  }
+
+  const articleTags = await prisma.blogArticleTag.findMany({ where: { articleId } });
+  const articleTagIds = articleTags.map(tag => tag.tagId);
+
+  for (const tag of tags) {
+    if (!articleTagIds.includes(tag.id)) {
+      await prisma.blogArticleTag.create({
+        data: {
+          articleId,
+          tagId: tag.id,
+        },
+      });
+    }
+  }
+
+  console.log(`Added tags [${tags.map(tag => tag.name).join(', ')}] to article with ID ${articleId}`);
+}
+```
+
+在上述代码中，我们首先使用 `findMany` 方法查询出所有待添加的标签，并在检查到没有任何标签匹配时抛出异常。然后，通过查询 `blog_article_tag` 表中所有与该文章关联的标签 ID，得到当前文章已经关联的标签列表。最后，遍历待添加的标签数组，如果某个标签还未与文章进行关联，则将其插入到 `blog_article_tag` 表中。
+
+需要说明的是，和前面使用外键的情况类似，这里同样需要注意保证应用程序对标签与文章的关系更新操作是正确的，否则可能会导致出现不一致数据的情况。
