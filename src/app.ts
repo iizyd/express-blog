@@ -5,9 +5,10 @@ import apiRouter from './routes/router'
 import { errorResponse } from './common/response'
 import './common/db'
 import { RESPONSE_CODE } from './common/code'
+import CONFIG from './config/config'
 
 const app: Application = express()
-const port = 9000
+const port = CONFIG.PORT
 
 app.use(bodyParser.json())
 app.get('/', (req: Request, res: Response, next: NextFunction) => {

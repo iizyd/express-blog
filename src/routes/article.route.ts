@@ -9,5 +9,6 @@ const articleController = new ArticleController()
 router.get('/', articleController.getAllArticles)
 router.get('/:id', articleController.getArticleById)
 router.post('/', validMiddleware(CreateArticleDto, 'body'), articleController.createArticle)
+router.delete('/:id', articleController.deleteArticleById)
 
 export default router

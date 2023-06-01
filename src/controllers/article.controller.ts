@@ -3,11 +3,19 @@ import { errorResponse, successResponse } from '../common/response'
 import { CreateArticleDto } from '../dto/article.dto'
 import { RESPONSE_CODE } from '../common/code'
 import articleService from '../services/article.service'
+import { getPage, getPageSize } from '../common/pagination'
 
 export default class ArticleController {
 	public async getAllArticles(req: Request, res: Response) {
-		const allArticles = await articleService.getAll()
-		successResponse(res, allArticles)
+		const page = getPage(req)
+		const pageSize = getPageSize(req)
+		const result = await articleService.getAll(page, pageSize)
+		successResponse(res, {
+			total: result.total,
+			page,
+			page_size: pageSize,
+			data: result.data
+		})
 	}
 
 	public async getArticleById(req: Request, res: Response) {
@@ -26,5 +34,16 @@ export default class ArticleController {
 
 		await articleService.create(createArticleDto)
 		successResponse(res, null)
+	}
+
+	public async deleteArticleById(req: Request, res: Response) {
+		const id = +req.params.id || 0
+		const article = await articleService.delete(id)
+
+		if (article) {
+			return successResponse(res, null)
+		} else {
+			return errorResponse(res, RESPONSE_CODE.NOT_FOUND)
+		}
 	}
 }
