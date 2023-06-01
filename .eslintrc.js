@@ -18,6 +18,7 @@ module.exports = {
 	plugins: ['@typescript-eslint', 'prettier'],
 	rules: {
 		'prettier/prettier': 'error', // 对于不符合prettier报eslint错误
-		camelcase: 'off'
+		camelcase: 'off',
+		'@typescript-eslint/no-empty-interface': 'off'
 	}
 }

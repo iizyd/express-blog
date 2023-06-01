@@ -2,7 +2,7 @@ import { blog_article } from '@prisma/client'
 import db from '../common/db'
 import { CreateArticleDto } from '../dto/article.dto'
 
-export type Article = blog_article
+export interface Article extends blog_article {}
 
 class ArticleModel {
 	public async getAll(): Promise<Article[]> {
