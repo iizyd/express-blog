@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { errorResponse, successResponse } from '../common/response'
-import { CreateArticleDto } from '../dto/article.dto'
+import { CreateArticleDto, UpdateArticleDto } from '../dto/article.dto'
 import { RESPONSE_CODE } from '../common/code'
 import articleService from '../services/article.service'
 import { getPage, getPageSize } from '../common/pagination'
@@ -44,6 +44,18 @@ export default class ArticleController {
 			return successResponse(res, null)
 		} else {
 			return errorResponse(res, RESPONSE_CODE.NOT_FOUND)
+		}
+	}
+
+	public async updateArticle(req: Request, res: Response) {
+		const id = +req.params.id || 0
+		const updateArticleDto: UpdateArticleDto = req.body
+		const article = await articleService.update(id, updateArticleDto)
+
+		if (article) {
+			successResponse(res, null)
+		} else {
+			errorResponse(res, RESPONSE_CODE.NOT_FOUND)
 		}
 	}
 }

@@ -1,5 +1,5 @@
 import articleModel, { Article } from '../models/article.model'
-import { CreateArticleDto } from '../dto/article.dto'
+import { CreateArticleDto, UpdateArticleDto } from '../dto/article.dto'
 import { getPageOffset } from '../common/pagination'
 
 class ArticleService {
@@ -29,6 +29,16 @@ class ArticleService {
 
 		if (article) {
 			return await articleModel.deleteById(id)
+		} else {
+			return null
+		}
+	}
+
+	public async update(id: number, updateArticleDto: UpdateArticleDto): Promise<Article | null> {
+		const article = await this.getById(id)
+
+		if (article) {
+			return await articleModel.update(id, updateArticleDto)
 		} else {
 			return null
 		}

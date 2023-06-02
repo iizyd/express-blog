@@ -1,6 +1,6 @@
 import { blog_article } from '@prisma/client'
 import db from '../common/db'
-import { CreateArticleDto } from '../dto/article.dto'
+import { CreateArticleDto, UpdateArticleDto } from '../dto/article.dto'
 
 export interface Article extends blog_article {}
 
@@ -29,6 +29,13 @@ class ArticleModel {
 			where: {
 				id
 			}
+		})
+	}
+
+	public async update(id: number, updateArticleDto: UpdateArticleDto): Promise<Article> {
+		return await db.blog_article.update({
+			where: { id },
+			data: updateArticleDto
 		})
 	}
 }
