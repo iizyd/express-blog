@@ -1,4 +1,4 @@
-import { IsIn, IsNumber, IsString, IsOptional } from 'class-validator'
+import { IsIn, IsNumber, IsString, IsOptional, IsArray } from 'class-validator'
 
 export class CreateArticleDto {
 	@IsString()
@@ -19,6 +19,10 @@ export class CreateArticleDto {
 	@IsNumber()
 	@IsIn([0, 1])
 	state: number
+
+	@IsArray()
+	@IsNumber({}, { each: true })
+	tags: number[]
 }
 
 export class UpdateArticleDto {
@@ -40,4 +44,9 @@ export class UpdateArticleDto {
 	@IsNumber()
 	@IsIn([0, 1])
 	state: number
+
+	@IsOptional()
+	@IsArray()
+	@IsNumber({}, { each: true })
+	tags: number[]
 }

@@ -8,7 +8,7 @@ datasource db {
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model blog_article {
+model article {
   id              Int       @id @default(autoincrement()) @db.UnsignedInt
   title           String?   @default("") @db.VarChar(100)
   desc            String?   @default("") @db.VarChar(255)
@@ -24,20 +24,15 @@ model blog_article {
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model blog_article_tag {
-  id          Int       @id @default(autoincrement()) @db.UnsignedInt
-  article_id  Int       @db.UnsignedInt
-  tag_id      Int       @db.UnsignedInt
-  created_on  DateTime? @default(now()) @db.DateTime(0)
-  created_by  String?   @default("") @db.VarChar(100)
-  modified_on DateTime? @default(now()) @db.DateTime(0)
-  modified_by String?   @default("") @db.VarChar(100)
-  deleted_on  DateTime? @db.DateTime(0)
-  is_del      Int?      @default(0) @db.UnsignedTinyInt
+model article_tag {
+  id         Int  @id @default(autoincrement()) @db.UnsignedInt
+  article_id Int  @db.UnsignedInt
+  tag_id     Int  @db.UnsignedInt
+  is_del     Int? @default(0) @db.UnsignedTinyInt
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model blog_tag {
+model tag {
   id          Int       @id @default(autoincrement()) @db.UnsignedInt
   name        String?   @default("") @db.VarChar(100)
   created_on  DateTime? @default(now()) @db.DateTime(0)
@@ -50,7 +45,7 @@ model blog_tag {
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model blog_auth {
+model user {
   id          Int       @id @default(autoincrement()) @db.UnsignedInt
   user_name   String?   @default("") @db.VarChar(20)
   password    String?   @default("") @db.VarChar(50)
