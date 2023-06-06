@@ -9,48 +9,32 @@ datasource db {
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model article {
-  id              Int       @id @default(autoincrement()) @db.UnsignedInt
-  title           String?   @default("") @db.VarChar(100)
-  desc            String?   @default("") @db.VarChar(255)
-  cover_image_url String?   @default("") @db.VarChar(255)
-  content         String?   @db.LongText
-  created_on      DateTime? @default(now()) @db.DateTime(0)
-  created_by      String?   @default("") @db.VarChar(100)
-  modified_on     DateTime? @default(now()) @db.DateTime(0)
-  modified_by     String?   @default("") @db.VarChar(100)
-  deleted_on      DateTime? @db.DateTime(0)
-  is_del          Int?      @default(0) @db.UnsignedTinyInt
-  state           Int?      @default(1) @db.UnsignedTinyInt
+  id              Int           @id @default(autoincrement()) @db.UnsignedInt
+  title           String        @db.VarChar(100)
+  description     String?       @default("") @db.VarChar(255)
+  cover_image_url String?       @default("") @db.VarChar(255)
+  content         String?       @db.LongText
+  created_on      DateTime?     @default(now()) @db.DateTime(0)
+  modified_on     DateTime?     @default(now()) @db.DateTime(0)
+  state           Int?          @default(1) @db.UnsignedTinyInt
+  article_tag     article_tag[]
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model article_tag {
-  id         Int  @id @default(autoincrement()) @db.UnsignedInt
-  article_id Int  @db.UnsignedInt
-  tag_id     Int  @db.UnsignedInt
-  is_del     Int? @default(0) @db.UnsignedTinyInt
+  id         Int     @id @default(autoincrement()) @db.UnsignedInt
+  article_id Int     @db.UnsignedInt
+  tag_id     Int     @db.UnsignedInt
+  article    article @relation(fields: [article_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "article_tag_ibfk_1")
+  tag        tag     @relation(fields: [tag_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "article_tag_ibfk_2")
+
+  @@index([article_id], map: "article_id")
+  @@index([tag_id], map: "tag_id")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model tag {
-  id          Int       @id @default(autoincrement()) @db.UnsignedInt
-  name        String?   @default("") @db.VarChar(100)
-  created_on  DateTime? @default(now()) @db.DateTime(0)
-  created_by  String?   @default("") @db.VarChar(100)
-  modified_on DateTime? @default(now()) @db.DateTime(0)
-  modified_by String?   @default("") @db.VarChar(100)
-  deleted_on  DateTime? @db.DateTime(0)
-  is_del      Int?      @default(0) @db.UnsignedTinyInt
-  state       Int?      @default(1) @db.UnsignedTinyInt
-}
-
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model user {
-  id          Int       @id @default(autoincrement()) @db.UnsignedInt
-  user_name   String?   @default("") @db.VarChar(20)
-  password    String?   @default("") @db.VarChar(50)
-  created_on  DateTime? @default(now()) @db.DateTime(0)
-  modified_on DateTime? @default(now()) @db.DateTime(0)
-  deleted_on  DateTime? @db.DateTime(0)
-  is_del      Int?      @default(0) @db.UnsignedTinyInt
+  id          Int           @id @default(autoincrement()) @db.UnsignedInt
+  name        String        @db.VarChar(100)
+  article_tag article_tag[]
 }

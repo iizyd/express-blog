@@ -1,31 +1,36 @@
-import { blog_article } from '@prisma/client'
+import { Prisma, article } from '@prisma/client'
 import db from '../common/db'
-import { CreateArticleDto, UpdateArticleDto } from '../dto/article.dto'
+import { UpdateArticleDto } from '../dto/article.dto'
 
-export interface Article extends blog_article {}
+export interface Article extends article {}
 
 class ArticleModel {
 	public async getAll(skip: number, take: number): Promise<Article[]> {
-		return await db.blog_article.findMany({
+		return await db.article.findMany({
 			skip,
 			take
 		})
 	}
 
 	public async getById(id: number): Promise<Article | null> {
-		return await db.blog_article.findFirst({ where: { id } })
+		return await db.article.findFirst({ where: { id } })
 	}
 
-	public async create(createArticleDto: CreateArticleDto): Promise<void> {
-		await db.blog_article.create({ data: createArticleDto })
+	public async create(data: Prisma.articleCreateInput): Promise<void> {
+		await db.article.create({
+			data,
+			include: {
+				article_tag: true
+			}
+		})
 	}
 
 	public async count(): Promise<number> {
-		return await db.blog_article.count()
+		return await db.article.count()
 	}
 
 	public async deleteById(id: number): Promise<Article> {
-		return await db.blog_article.delete({
+		return await db.article.delete({
 			where: {
 				id
 			}
@@ -33,7 +38,7 @@ class ArticleModel {
 	}
 
 	public async update(id: number, updateArticleDto: UpdateArticleDto): Promise<Article> {
-		return await db.blog_article.update({
+		return await db.article.update({
 			where: { id },
 			data: updateArticleDto
 		})

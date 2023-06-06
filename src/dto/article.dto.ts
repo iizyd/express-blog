@@ -6,7 +6,7 @@ export class CreateArticleDto {
 
 	@IsString()
 	@IsOptional()
-	desc: string
+	description: string
 
 	@IsString()
 	@IsOptional()
@@ -20,6 +20,7 @@ export class CreateArticleDto {
 	@IsIn([0, 1])
 	state: number
 
+	@IsOptional()
 	@IsArray()
 	@IsNumber({}, { each: true })
 	tags: number[]
@@ -31,7 +32,7 @@ export class UpdateArticleDto {
 
 	@IsString()
 	@IsOptional()
-	desc: string
+	description: string
 
 	@IsString()
 	@IsOptional()
