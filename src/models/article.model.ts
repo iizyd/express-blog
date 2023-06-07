@@ -8,7 +8,10 @@ class ArticleModel {
 	public async getAll(skip: number, take: number): Promise<Article[]> {
 		return await db.article.findMany({
 			skip,
-			take
+			take,
+			include: {
+				article_tag: true
+			}
 		})
 	}
 

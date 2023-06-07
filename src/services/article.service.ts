@@ -12,8 +12,13 @@ class ArticleService {
 		const pageOffset = getPageOffset(page, pageSize)
 		const articles = await articleModel.getAll(pageOffset, pageSize)
 		const total = await articleModel.count()
+
+		const resultArticle = articles.map((article) => {
+			article.tags = article.article_tag
+			return article
+		})
 		return {
-			data: articles,
+			data: resultArticle,
 			total
 		}
 	}
@@ -25,24 +30,19 @@ class ArticleService {
 	public async create(createArticleDto: CreateArticleDto): Promise<void> {
 		const { title, description, cover_image_url, content, state, tags } = createArticleDto
 		const tagObjects = await tagModel.getManyByIds(tags)
-		console.log(tagObjects)
 
-		try {
-			const createArticleInput: Prisma.articleCreateInput = {
-				title,
-				description,
-				cover_image_url,
-				content,
-				state,
-				article_tag: {
-					connect: tagObjects.map(tag => ({ id: tag.id }))
-				}
+		const createArticleInput: Prisma.articleCreateInput = {
+			title,
+			description,
+			cover_image_url,
+			content,
+			state,
+			article_tag: {
+				create: tagObjects.map(tag => ({ tag: { connect: { id: tag.id } } }))
 			}
-			console.log(createArticleInput.article_tag)
-			await articleModel.create(createArticleInput)
-		} catch (err) {
-			console.log(err)
 		}
+
+		await articleModel.create(createArticleInput)
 	}
 
 	public async delete(id: number): Promise<Article | null> {
