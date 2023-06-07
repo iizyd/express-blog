@@ -1,4 +1,4 @@
-import { IsIn, IsNumber, IsString, IsOptional, IsArray } from 'class-validator'
+import { IsNumber, IsString, IsOptional, IsArray, IsBoolean } from 'class-validator'
 
 export class CreateArticleDto {
 	@IsString()
@@ -16,9 +16,8 @@ export class CreateArticleDto {
 	@IsOptional()
 	content: string
 
-	@IsNumber()
-	@IsIn([0, 1])
-	state: number
+	@IsBoolean()
+	published: boolean
 
 	@IsOptional()
 	@IsArray()
@@ -42,9 +41,8 @@ export class UpdateArticleDto {
 	@IsOptional()
 	content: string
 
-	@IsNumber()
-	@IsIn([0, 1])
-	state: number
+	@IsBoolean()
+	published: boolean
 
 	@IsOptional()
 	@IsArray()

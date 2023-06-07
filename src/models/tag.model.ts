@@ -1,8 +1,6 @@
-import { tag } from '@prisma/client'
+import { Tag } from '@prisma/client'
 import db from '../common/db'
 import { CreateTagDto } from '../dto/tag.dto'
-
-export interface Tag extends tag {}
 
 class TagModel {
 	public async getAll(pageOffset: number, pageSize: number): Promise<Tag[]> {

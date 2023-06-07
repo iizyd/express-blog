@@ -1,29 +1,37 @@
-import { Prisma, article } from '@prisma/client'
+import { Prisma, Article, ArticleTag } from '@prisma/client'
 import db from '../common/db'
-import { UpdateArticleDto } from '../dto/article.dto'
-
-export interface Article extends article {}
 
 class ArticleModel {
-	public async getAll(skip: number, take: number): Promise<Article[]> {
+	public async getAll(
+		skip: number,
+		take: number
+	): Promise<
+		(Article & {
+			tags: ArticleTag[]
+		})[]
+	> {
 		return await db.article.findMany({
 			skip,
 			take,
 			include: {
-				article_tag: true
+				tags: true
 			}
 		})
 	}
 
 	public async getById(id: number): Promise<Article | null> {
-		return await db.article.findFirst({ where: { id } })
+		return await db.article.findFirst({ where: { id }, include: { tags: true } })
 	}
 
-	public async create(data: Prisma.articleCreateInput): Promise<void> {
-		await db.article.create({
+	public async create(data: Prisma.ArticleCreateInput): Promise<
+		Article & {
+			tags: ArticleTag[]
+		}
+	> {
+		return await db.article.create({
 			data,
 			include: {
-				article_tag: true
+				tags: true
 			}
 		})
 	}
@@ -40,10 +48,10 @@ class ArticleModel {
 		})
 	}
 
-	public async update(id: number, updateArticleDto: UpdateArticleDto): Promise<Article> {
+	public async update(id: number, data: Prisma.ArticleUpdateInput): Promise<Article> {
 		return await db.article.update({
 			where: { id },
-			data: updateArticleDto
+			data
 		})
 	}
 }

@@ -1,6 +1,7 @@
+import { Tag } from '@prisma/client'
 import { getPageOffset } from '../common/pagination'
 import { CreateTagDto } from '../dto/tag.dto'
-import tagModel, { Tag } from '../models/tag.model'
+import tagModel from '../models/tag.model'
 
 class TagService {
 	public async getAll(page: number, pageSize: number): Promise<{ data: Tag[]; total: number }> {
