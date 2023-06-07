@@ -2,25 +2,59 @@ import articleModel from '../models/article.model'
 import { CreateArticleDto, UpdateArticleDto } from '../dto/article.dto'
 import { getPageOffset } from '../common/pagination'
 import tagModel from '../models/tag.model'
-import { Article, ArticleTag, Prisma } from '@prisma/client'
+import { Article, Prisma } from '@prisma/client'
+import articleTagModel from '../models/article-tag.model'
+import formatDateString from '../util/date-format'
+
+type ArticleTypeToString<T> = {
+	[P in keyof T]: T[P] extends Date | null ? string | null : T[P]
+}
+interface ArticleItem extends ArticleTypeToString<Article> {
+	tags: number[]
+}
 
 class ArticleService {
 	public async getAll(
 		page: number,
 		pageSize: number
-	): Promise<{ data: (Article & { tags: ArticleTag[] })[]; total: number }> {
+	): Promise<{ data: ArticleItem[]; total: number }> {
 		const pageOffset = getPageOffset(page, pageSize)
 		const articles = await articleModel.getAll(pageOffset, pageSize)
 		const total = await articleModel.count()
 
+		const resultArticles: ArticleItem[] = articles.map(article => {
+			return {
+				...article,
+				created_on: formatDateString(article.created_on),
+				modified_on: formatDateString(article.modified_on),
+				tags: article.tags.map(articleTag => {
+					return articleTag.tag_id
+				})
+			}
+		})
+
 		return {
-			data: articles,
+			data: resultArticles,
 			total
 		}
 	}
 
-	public async getById(id: number): Promise<Article | null> {
-		return await articleModel.getById(id)
+	public async getById(id: number): Promise<ArticleItem | null> {
+		const article = await articleModel.getById(id)
+
+		if (article) {
+			const resultArticle: ArticleItem = {
+				...article,
+				created_on: formatDateString(article.created_on),
+				modified_on: formatDateString(article.modified_on),
+				tags: article.tags.map(articleTag => {
+					return articleTag.tag_id
+				})
+			}
+			return resultArticle
+		} else {
+			return null
+		}
 	}
 
 	public async create(createArticleDto: CreateArticleDto): Promise<void> {
@@ -59,6 +93,7 @@ class ArticleService {
 				updateArticleDto
 			const tagObjects = await tagModel.getManyByIds(tags)
 			// 更新的时候，之前的标签需要清除，已经存在的再次请求会出错
+			await articleTagModel.deleteArticleTagsByArticleId(id)
 
 			const updateArticleInput: Prisma.ArticleUpdateInput = {
 				title,
@@ -70,14 +105,8 @@ class ArticleService {
 					create: tagObjects.map(tag => ({ tag: { connect: { id: tag.id } } }))
 				}
 			}
-			let result: any = null
-			try {
-				result = await articleModel.update(id, updateArticleInput)
-			} catch (err) {
-				console.log(err)
-			}
 
-			return result
+			return await articleModel.update(id, updateArticleInput)
 		} else {
 			return null
 		}

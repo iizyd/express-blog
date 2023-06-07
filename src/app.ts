@@ -44,6 +44,7 @@ app.use(function (err: Error, req: Request, res: Response, next: NextFunction) {
 		timestamp
 	})
 	errorResponse(res, RESPONSE_CODE.INTERNAL_SERVER_ERROR)
+	next()
 })
 
 app.listen(port, () => {

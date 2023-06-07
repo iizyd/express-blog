@@ -5,7 +5,7 @@ import CONFIG from '../config/config'
 const transport: DailyRotateFile = new DailyRotateFile({
 	filename: 'app-%DATE%.log' as string,
 	dirname: 'src/storage/log/',
-	datePattern: 'YYYY-MM-DD-HH',
+	datePattern: 'YYYY-MM-DD',
 	zippedArchive: true,
 	maxSize: '20m',
 	maxFiles: '14d',

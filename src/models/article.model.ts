@@ -19,7 +19,12 @@ class ArticleModel {
 		})
 	}
 
-	public async getById(id: number): Promise<Article | null> {
+	public async getById(id: number): Promise<
+		| (Article & {
+				tags: ArticleTag[]
+		  })
+		| null
+	> {
 		return await db.article.findFirst({ where: { id }, include: { tags: true } })
 	}
 
