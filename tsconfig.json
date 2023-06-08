@@ -1,21 +1,19 @@
 {
-    "compilerOptions": {
-        "target": "es6",
-        "module": "commonjs",
-        "outDir": "./dist",
-        "esModuleInterop": true,
-        "sourceMap": true,
-        "strict": true,
-        "moduleResolution": "node",
-        "resolveJsonModule": true,
-        "declaration": false,
-        "experimentalDecorators": true,
-        "strictPropertyInitialization": false
-    },
-    "include": [
-        "src/**/*"
-    ],
-    "exclude": [
-        "node_modules"
-    ]
+	"compilerOptions": {
+		"target": "es6",
+		"module": "commonjs",
+		"outDir": "./dist",
+		"esModuleInterop": true,
+		"sourceMap": true,
+		"strict": true,
+		"moduleResolution": "node",
+		"resolveJsonModule": true,
+		"declaration": false,
+		"experimentalDecorators": true,
+		"strictPropertyInitialization": false,
+		"typeRoots": ["node_modules/@types"]
+	},
+	"files": ["src/index.d.ts"],
+	"include": ["src/**/*"],
+	"exclude": ["node_modules"]
 }

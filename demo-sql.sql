@@ -3,6 +3,7 @@ CREATE DATABASE IF NOT EXISTS express_blog DEFAULT CHARACTER SET utf8mb4 DEFAULT
 DROP TABLE IF EXISTS `article_tag`;
 DROP TABLE IF EXISTS `article`;
 DROP TABLE IF EXISTS `tag`;
+DROP TABLE IF EXISTS `user`;
 
 CREATE TABLE `tag` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -40,8 +41,8 @@ CREATE TABLE `article_tag` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='文章标签关联';
 
 CREATE TABLE `user` (
-  `id` int(10) unsigned NOT NULL,
-  `name` varchar(100) NOT NULL COMMENT '用户名称',
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(100) NOT NULL COMMENT '用户名称',
   `password` varchar(100) NOT NULL COMMENT '用户密码',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
 
