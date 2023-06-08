@@ -16,8 +16,8 @@ CREATE TABLE `article` (
   `description` varchar(255) DEFAULT '' COMMENT '文章简述',
   `cover_image_url` varchar(255) DEFAULT '' COMMENT '封面图片地址',
   `content` longtext COMMENT '文章内容',
-  `created_on` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `modified_on` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `modified_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `published`  BOOLEAN NOT NULL DEFAULT false COMMENT '是否发布',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='文章管理';
@@ -38,4 +38,13 @@ CREATE TABLE `article_tag` (
   FOREIGN KEY (`article_id`) REFERENCES `article` (`id`) ON DELETE CASCADE,
   FOREIGN KEY (`tag_id`) REFERENCES `tag` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='文章标签关联';
+
+CREATE TABLE `user` (
+  `id` int(10) unsigned NOT NULL,
+  `name` varchar(100) NOT NULL COMMENT '用户名称',
+  `password` varchar(100) NOT NULL COMMENT '用户密码',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+
+  PRIMARY KEY (`id`)
+)
 

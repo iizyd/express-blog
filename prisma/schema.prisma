@@ -14,8 +14,8 @@ model Article {
   description     String?      @default("") @db.VarChar(255)
   cover_image_url String?      @default("") @db.VarChar(255)
   content         String?      @db.LongText
-  created_on      DateTime?    @default(now()) @db.DateTime(0)
-  modified_on     DateTime?    @default(now()) @db.DateTime(0)
+  created_at      DateTime?    @default(now()) @db.DateTime(0)
+  modified_at     DateTime?    @default(now()) @db.DateTime(0)
   published       Boolean      @default(false)
   tags            ArticleTag[]
 
@@ -41,4 +41,14 @@ model Tag {
   article_tag ArticleTag[]
 
   @@map("tag")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model User {
+  id         Int       @id @db.UnsignedInt
+  name       String    @db.VarChar(100)
+  password   String    @db.VarChar(100)
+  created_at DateTime? @default(now()) @db.DateTime(0)
+
+  @@map("user")
 }

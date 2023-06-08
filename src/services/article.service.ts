@@ -25,8 +25,8 @@ class ArticleService {
 		const resultArticles: ArticleItem[] = articles.map(article => {
 			return {
 				...article,
-				created_on: formatDateString(article.created_on),
-				modified_on: formatDateString(article.modified_on),
+				created_at: formatDateString(article.created_at),
+				modified_at: formatDateString(article.modified_at),
 				tags: article.tags.map(articleTag => {
 					return articleTag.tag_id
 				})
@@ -45,8 +45,8 @@ class ArticleService {
 		if (article) {
 			const resultArticle: ArticleItem = {
 				...article,
-				created_on: formatDateString(article.created_on),
-				modified_on: formatDateString(article.modified_on),
+				created_at: formatDateString(article.created_at),
+				modified_at: formatDateString(article.modified_at),
 				tags: article.tags.map(articleTag => {
 					return articleTag.tag_id
 				})
