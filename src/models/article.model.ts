@@ -13,6 +13,7 @@ class ArticleModel {
 		return await db.article.findMany({
 			skip,
 			take,
+			orderBy: [{ created_at: 'desc' }],
 			include: {
 				tags: true
 			}

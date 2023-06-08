@@ -1,0 +1,18 @@
+{
+  level: 'error',
+  message: "ENOENT: no such file or directory, open 'src/storage/uploads/file-1686229457805-427301990.png'",
+  stack: "Error: ENOENT: no such file or directory, open 'src/storage/uploads/file-1686229457805-427301990.png'",
+  timestamp: '2023-06-08T13:04:17.809Z'
+}
+{
+  level: 'error',
+  message: "ENOENT: no such file or directory, open 'src/storage/uploads/file-1686229532630-222942784.png'",
+  stack: "Error: ENOENT: no such file or directory, open 'src/storage/uploads/file-1686229532630-222942784.png'",
+  timestamp: '2023-06-08T13:05:32.631Z'
+}
+{
+  level: 'error',
+  message: "ENOENT: no such file or directory, open 'src/storage/uploads/file-1686229589062-68964633.png'",
+  stack: "Error: ENOENT: no such file or directory, open 'src/storage/uploads/file-1686229589062-68964633.png'",
+  timestamp: '2023-06-08T13:06:29.063Z'
+}

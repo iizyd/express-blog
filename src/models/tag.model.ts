@@ -6,7 +6,8 @@ class TagModel {
 	public async getAll(pageOffset: number, pageSize: number): Promise<Tag[]> {
 		return await db.tag.findMany({
 			skip: pageOffset,
-			take: pageSize
+			take: pageSize,
+			orderBy: [{ id: 'desc' }]
 		})
 	}
 

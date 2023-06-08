@@ -18,7 +18,7 @@ const apis = {
 
 	// 上传文件
 	uploadFile: (data: any = {}) =>
-		Post('/upload', data, {
+		Post('/api/upload', data, {
 			headers: {
 				'Content-Type': 'multipart/form-data'
 			}

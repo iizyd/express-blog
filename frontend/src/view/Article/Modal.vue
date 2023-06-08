@@ -27,12 +27,16 @@
 							<n-input v-model:value="form.title" placeholder="标题" />
 						</n-form-item>
 
-						<n-form-item label="描述" path="desc">
-							<n-input type="textarea" v-model:value="form.desc" placeholder="描述" />
+						<n-form-item label="描述" path="description">
+							<n-input
+								type="textarea"
+								v-model:value="form.description"
+								placeholder="描述"
+							/>
 						</n-form-item>
 
-						<n-form-item label="状态" path="state">
-							<n-switch v-model:value="form.state" />
+						<n-form-item label="状态" path="published">
+							<n-switch v-model:value="form.published" />
 						</n-form-item>
 
 						<n-form-item label="内容" path="content">
@@ -45,7 +49,7 @@
 
 						<n-form-item label="封面图片">
 							<n-upload
-								action="http://127.0.0.1:8000"
+								action="http://127.0.0.1:9000"
 								:default-file-list="fileList"
 								list-type="image-card"
 								:custom-request="customUpload"
@@ -59,9 +63,9 @@
 
 						<n-form-item label="标签" path="tag">
 							<n-select
-								v-model:value="form.tag"
+								v-model:value="form.tags"
 								multiple
-								:options="tag_list"
+								:options="tags"
 								placeholder="选择标签"
 								clearable
 							/>
@@ -100,14 +104,16 @@ const props = withDefaults(
     show_modal: boolean;
     article_id: number;
     modal_type: "new" | "edit";
+    tags: { label: string; value: number}[]
   }>(),
   {
     show_modal: false,
     article_id: 0,
     modal_type: "new",
+    tags: () => ([])
   }
 );
-const { show_modal, article_id, modal_type } = toRefs(props);
+const { show_modal, article_id, modal_type, tags } = toRefs(props);
 
 const emit = defineEmits<{
   (e: "update:show_modal", val: boolean): void;
@@ -119,21 +125,21 @@ const title = computed(() => {
 });
 
 const form = reactive<{
-  state?: string | number | boolean;
+  published?: boolean;
   title?: string;
-  desc?: string;
+  description?: string;
   cover_image_url?: string;
   content?: string;
-  modified_by?: string;
-  tag?: number[];
+  modified_at?: string;
+  tags?: number[];
 }>({
   title: "",
-  desc: "",
-  state: 0,
+  description: "",
+  published: false,
   cover_image_url: "",
   content: "",
-  modified_by: "zz",
-  tag: [],
+  modified_at: "zz",
+  tags: [],
 });
 
 const rules = {
@@ -142,7 +148,7 @@ const rules = {
     trigger: ["blur", "input"],
     message: "请输入标题",
   },
-  desc: {
+  description: {
     required: true,
     trigger: ["blur", "input"],
     message: "请输入描述",
@@ -154,12 +160,12 @@ const formRef = ref<FormInst | null>(null);
 // 事件
 const resetForm = () => {
   form.title = "";
-  form.desc = "";
-  form.state = 0;
+  form.description = "";
+  form.published = false;
   form.content = "";
   form.cover_image_url = "";
-  form.modified_by = "zz";
-  form.tag = []
+  form.modified_at = "zz";
+  form.tags = []
 
   fileList.value = [];
 };
@@ -236,15 +242,15 @@ const customUpload = async ({
 }: UploadCustomRequestOptions) => {
   const formData = new FormData();
   formData.append("file", file.file as File);
-  formData.append("type", "1");
+  // formData.append("type", "1");
 
   const res = await apis.uploadFile(formData);
 
-  if (res.code === 0) {
+  if (res.code === 200) {
     fileList.value = [
       {
         ...file,
-        url: res.data.file_access_url,
+        url: res.data.url,
       },
     ];
 
@@ -266,16 +272,16 @@ watch(show_modal, (val) => {
 const getArticleInfo = async () => {
   const res = await apis.getArticle(article_id.value);
 
-  if (res.code === 0) {
-    const data = res.data[0];
+  if (res.code === 200) {
+    const data = res.data;
     form.content = data.content;
     form.title = data.title;
-    form.desc = data.desc;
-    form.state = Boolean(data.state);
+    form.description = data.description;
+    form.published = data.published;
     form.cover_image_url = data.cover_image_url;
-    form.modified_by = data.modified_by || "zz";
+    form.modified_at = data.modified_by || "zz";
 
-    form.tag = (data.tag as {id: number}[])?.map((item) => item.id)
+    form.tags = data.tags
 
     if (data.cover_image_url) {
       fileList.value[0] = {
@@ -291,22 +297,19 @@ const getArticleInfo = async () => {
 // 修改文章
 const updateArticle = async () => {
   const res = await apis.updateArticle(article_id.value, {
-    ...form,
-    state: Number(form.state),
+    ...form
   });
 
-  return Promise.resolve(res.code === 0);
+  return Promise.resolve(res.code === 200);
 };
 
 // 创建文章
 const createArticle = async () => {
   const res = await apis.createArticle({
-    ...form,
-    state: Number(form.state),
-    created_by: "zz",
+    ...form
   });
 
-  return Promise.resolve(res.code === 0);
+  return Promise.resolve(res.code === 200);
 };
 
 // 编辑器
@@ -316,7 +319,7 @@ const onUploadImg = async (files: File[], callback: any) => {
       return new Promise((rev, rej) => {
         const formData = new FormData();
         formData.append("file", file);
-        formData.append("type", "1");
+        // formData.append("type", "1");
 
         apis
           .uploadFile(formData)
@@ -326,29 +329,8 @@ const onUploadImg = async (files: File[], callback: any) => {
     })
   );
 
-  callback(res.map((item: any) => item.data.file_access_url));
+  callback(res.map((item: any) => item.data.url));
 };
-
-// 标签下拉框
-const tag_list = ref<{ value?: number; label?: string }[]>([]);
-
-const getTagList = async () => {
-  const res = await apis.getTags({
-    page: 1,
-    page_size: 9999,
-  });
-
-  if (res.code === 0) {
-    tag_list.value =
-      (res.data?.data as { id: number; name: string }[]).map((item) => {
-        return {
-          label: item.name,
-          value: item.id,
-        };
-      }) || [];
-  }
-};
-getTagList();
 </script>
 
 <style lang="less" scoped>

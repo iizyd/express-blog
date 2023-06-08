@@ -1,30 +1,31 @@
 <template>
-  <div class="article-wrap">
-    <n-space vertical>
-      <n-button type="primary" @click="onCreate">添 加</n-button>
+	<div class="article-wrap">
+		<n-space vertical>
+			<n-button type="primary" @click="onCreate">添 加</n-button>
 
-      <n-data-table
-        remote
-        bordered
-        ref="table"
-        :columns="columns"
-        :data="data"
-        :loading="loading"
-        :pagination="pagination"
-        :row-key="rowKey"
-        @update:page="handlePageChange"
-        flex-height
-        :style="{ height: 'calc(100vh - 85px - 34px)' }"
-      />
+			<n-data-table
+				remote
+				bordered
+				ref="table"
+				:columns="columns"
+				:data="data"
+				:loading="loading"
+				:pagination="pagination"
+				:row-key="rowKey"
+				@update:page="handlePageChange"
+				flex-height
+				:style="{ height: 'calc(100vh - 85px - 34px)' }"
+			/>
 
-      <!-- <Modal
-        v-model:show_modal="show_modal"
-        :article_id="article_id"
-        :modal_type="modal_type"
-        @refresh="getData"
-      /> -->
-    </n-space>
-  </div>
+			<Modal
+				v-model:show_modal="show_modal"
+				:article_id="article_id"
+				:modal_type="modal_type"
+				:tags="tag_list"
+				@refresh="getData"
+			/>
+		</n-space>
+	</div>
 </template>
 
 <script lang="ts" setup>
@@ -49,7 +50,7 @@ interface ArticleItem {
   cover_image_url: string;
   content: string;
   modified_on: string;
-  state: number;
+  published: boolean;
   // tags: { id?: number; name?: string }[];
   tags: number[];
 }
@@ -132,14 +133,14 @@ const columns = ref([
     },
     render(row: ArticleItem): VNode {
       return h("span", { class: "table-tag-wrap" }, [
-        ...row.tags?.map((item) =>
+        ...row.tags.map((tag_id) =>
           h(
             NTag,
             {
               type: "info",
               size: "small",
             },
-            { default: () => item.name }
+            { default: () => tag_list.value.find((tag) => tag.value === tag_id)?.label }
           )
         ),
       ]);
@@ -160,10 +161,10 @@ const columns = ref([
       return h(
         NTag,
         {
-          type: !row.state ? "warning" : "success",
+          type: !row.published ? "warning" : "success",
           size: "medium",
         },
-        { default: () => (!row.state ? "草稿" : "发布") }
+        { default: () => (!row.published ? "草稿" : "发布") }
       );
     },
   },
@@ -247,6 +248,26 @@ const getData = async () => {
   loading.value = false;
 };
 getData();
+
+// 标签下拉框
+const tag_list = ref<{ value: number; label: string }[]>([]);
+const getTagList = async () => {
+  const res = await apis.getTags({
+    page: 1,
+    page_size: 9999,
+  });
+
+  if (res.code === 200) {
+    tag_list.value =
+      (res.data?.data as { id: number; name: string }[]).map((item) => {
+        return {
+          label: item.name,
+          value: item.id,
+        };
+      }) || [];
+  }
+};
+getTagList()
 </script>
 
 <style lang="less" scoped>
