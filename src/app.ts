@@ -30,6 +30,8 @@ app.get('/', (req: Request, res: Response, next: NextFunction) => {
 })
 
 app.use('/api', apiRouter)
+// 静态资源
+app.use('/uploads', express.static('src/storage/uploads'))
 
 // 错误处理
 app.use(function (err: Error, req: Request, res: Response, next: NextFunction) {
