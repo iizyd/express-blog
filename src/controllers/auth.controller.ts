@@ -16,7 +16,7 @@ class AuthController {
 
 		const token = jwtSign({ id: user.id })
 		res.set('Authorization', `Bearer ${token}`)
-		successResponse(res, null)
+		successResponse(res, { token })
 	}
 }
 

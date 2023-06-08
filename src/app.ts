@@ -7,10 +7,12 @@ import './common/db'
 import { RESPONSE_CODE } from './common/code'
 import CONFIG from './config/config'
 import logger from './util/logger'
+import cors from 'cors'
 
 const app: Application = express()
 const port = CONFIG.PORT
 
+app.use(cors())
 app.use(bodyParser.json())
 // 日志记录
 app.use((req: Request, res: Response, next: NextFunction) => {
