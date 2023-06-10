@@ -3,9 +3,21 @@ import multer from 'multer'
 import UploadController from '../controllers/upload.controller'
 import path from 'path'
 import authMiddleware from '../middleware/auth.middleware'
+import fs from 'fs'
 
 const router = Router()
 const uploadController = new UploadController()
+
+// 检查目标文件夹是否存在，如果不存在则自动创建
+const createUploadsFolder = () => {
+	const folderPath = 'src/storage/uploads'
+	if (!fs.existsSync(folderPath)) {
+		fs.mkdirSync(folderPath, { recursive: true })
+	}
+}
+
+// 调用函数创建目标文件夹
+createUploadsFolder()
 
 // 配置 multer 中间件
 const storage = multer.diskStorage({

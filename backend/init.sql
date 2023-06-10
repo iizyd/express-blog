@@ -47,5 +47,6 @@ CREATE TABLE `user` (
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
 
   PRIMARY KEY (`id`)
-)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
 
+INSERT INTO user (username, password) VALUES ('admin', '123456');
