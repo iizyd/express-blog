@@ -1,10 +1,11 @@
 #!/bin/bash
 
 # 定义路径变量
-data_path="/Users/zyd/Documents/code/mine/docker-data-test"
+data_path="/home/docker/data"
 
 # 删除已存在的容器
-docker rm -f mysql-container backend-container frontend-container
+docker rm -f mysql-container backend-container 
+# frontend-container
 
 
 # 启动容器
@@ -18,4 +19,4 @@ done
 
 docker run -d --name backend-container -p 9000:9000 -v "$data_path"/storage:/app/src/storage --link mysql-container:mysql express-backend
 
-docker run -d --name frontend-container -p 80:80 vue-frontend
+# docker run -d --name frontend-container -p 80:80 vue-frontend
