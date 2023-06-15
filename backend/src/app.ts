@@ -12,7 +12,14 @@ import cors from 'cors'
 const app: Application = express()
 const port = CONFIG.PORT
 
-app.use(cors())
+app.use(
+	cors({
+		origin: '*',
+		methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+		credentials: true, // 允许发送身份验证凭证（如 cookies）
+		optionsSuccessStatus: 200 // 设置预检请求的返回状态码
+	})
+)
 app.use(bodyParser.json())
 // 日志记录
 app.use((req: Request, res: Response, next: NextFunction) => {
