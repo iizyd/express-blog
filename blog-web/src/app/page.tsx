@@ -8,15 +8,15 @@ export default function Home() {
           {articleList.map((item) => (
             <li
               key={item.id}
-              className="mb-6 rounded-md px-7 py-6 cursor-pointer transition-all hover:scale-105 active:scale-100 shadow-md backdrop-blur-sm bg-white/90"
+              className="mb-6 rounded-md px-7 py-6 cursor-pointer transition-all hover:scale-105 duration-500 active:scale-100 shadow-md backdrop-blur-sm bg-white"
             >
               <div className="font-bold text-lg cursor-pointer line-clamp-1 max-w-md">
                 <span className="hover:text-sky-900">{item.title}</span>
               </div>
-              <div className="text-gray-600 mt-3 line-clamp-3 font-thin">
+              <div className="text-gray-600 mt-3 line-clamp-3">
                 {item.content}
               </div>
-              <div className="text-sm mt-2 text-gray-400 font-thin">
+              <div className="text-sm mt-2 text-gray-400">
                 {item.date}
               </div>
             </li>
