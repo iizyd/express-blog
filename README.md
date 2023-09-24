@@ -90,4 +90,12 @@ npm run dev
 博客界面借鉴自 [Paranoid_K](https://github.com/pengtikui) 大佬
 
 ## 截图
+![blog-1](https://raw.githubusercontent.com/iamzhiyudong/express-blog/main/pic/blog-1.png)
 
+![blog-2](https://raw.githubusercontent.com/iamzhiyudong/express-blog/main/pic/blog-2.png)
+
+![blog-3](https://raw.githubusercontent.com/iamzhiyudong/express-blog/main/pic/blog-3.png)
+
+![frontend-1](https://raw.githubusercontent.com/iamzhiyudong/express-blog/main/pic/frontend-1.png)
+
+![frontend-2](https://raw.githubusercontent.com/iamzhiyudong/express-blog/main/pic/frontend-2.png)
