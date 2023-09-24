@@ -33,7 +33,7 @@ export default function Markdown({ markdown }: { markdown: string }) {
       <MdPreview
         editorId="preview"
         modelValue={markdown}
-        previewTheme="cyanosis"
+        previewTheme="vuepress"
         codeTheme="github"
       />
     </>
