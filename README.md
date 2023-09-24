@@ -99,3 +99,7 @@ npm run dev
 ![frontend-1](https://raw.githubusercontent.com/iamzhiyudong/express-blog/main/pic/frontend-1.png)
 
 ![frontend-2](https://raw.githubusercontent.com/iamzhiyudong/express-blog/main/pic/frontend-2.png)
+
+![frontend-3](https://raw.githubusercontent.com/iamzhiyudong/express-blog/main/pic/frontend-3.png)
+
+![frontend-4](https://raw.githubusercontent.com/iamzhiyudong/express-blog/main/pic/frontend-4.png)
