@@ -8,6 +8,7 @@ const router = Router()
 const articleController = new ArticleController()
 
 router.get('/', articleController.getAllArticles)
+router.get('/published', articleController.getAllPublishedArticles)
 router.get('/:id', articleController.getArticleById)
 
 router.post(

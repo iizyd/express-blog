@@ -1,6 +1,16 @@
 import Header from "@/app/components/header";
+import { Inter } from 'next/font/google'
 import "./globals.css";
 import type { Metadata } from "next";
+import Footer from "@/app/components/footer";
+ 
+const inter = Inter({
+  variable: '--font-inter',
+  preload: false,
+  subsets: ['latin'],
+  display: 'swap',
+  weight: '400',
+})
 
 export const metadata: Metadata = {
   title: "Blog Web",
@@ -13,10 +23,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="zh">
-      <body className="relative bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% overscroll-none">
-        <Header />
-        <main className="p-10">{children}</main>
+    <html lang="zh" className="inter.variable">
+      <body className="text-base">
+        <div className="max-w-3xl mx-auto px-2">
+          <Header />
+          <main className="bg-white">{children}</main>
+          <Footer />
+        </div>
       </body>
     </html>
   );

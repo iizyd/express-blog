@@ -9,7 +9,23 @@ export default class ArticleController {
 	public async getAllArticles(req: Request, res: Response) {
 		const page = getPage(req)
 		const pageSize = getPageSize(req)
-		const result = await articleService.getAll(page, pageSize)
+		const published = req.query?.published ? req.query.published !== 'false' : undefined
+
+		const result = await articleService.getAll(page, pageSize, published)
+		successResponse(res, {
+			total: result.total,
+			page,
+			page_size: pageSize,
+			data: result.data
+		})
+	}
+
+	public async getAllPublishedArticles(req: Request, res: Response) {
+		const page = getPage(req)
+		const pageSize = getPageSize(req)
+		const tagId = req.query?.tag_id ? Number(req.query.tag_id) : undefined
+
+		const result = await articleService.getAll(page, pageSize, true, tagId)
 		successResponse(res, {
 			total: result.total,
 			page,

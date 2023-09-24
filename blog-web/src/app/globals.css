@@ -2,6 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-size: 14px;
+@font-face {
+  font-family: 'font_1';
+  src: url('../../public/font-1.woff2') format('woff');
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'font_2';
+  src: url('../../public/font-2.woff2') format('woff');
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'font_3';
+  src: url('../../public/font-3.woff2') format('woff');
+  font-style: normal;
+}
+
+html {
+  font: var(--font-inter);
 }

@@ -16,11 +16,13 @@ interface ArticleItem extends ArticleTypeToString<Article> {
 class ArticleService {
 	public async getAll(
 		page: number,
-		pageSize: number
+		pageSize: number,
+		published?: boolean,
+		tagId?: number
 	): Promise<{ data: ArticleItem[]; total: number }> {
 		const pageOffset = getPageOffset(page, pageSize)
-		const articles = await articleModel.getAll(pageOffset, pageSize)
-		const total = await articleModel.count()
+		const articles = await articleModel.getAll(pageOffset, pageSize, published, tagId)
+		const total = await articleModel.count(published, tagId)
 
 		const resultArticles: ArticleItem[] = articles.map(article => {
 			return {
