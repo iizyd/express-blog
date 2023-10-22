@@ -11,7 +11,7 @@ export default function About() {
         <p>
           🥰{" "}
           <a
-            href="https://github.com/iamzhiyudong"
+            href="https://github.com/iizyd"
             target="_blank"
             className="hover:underline"
           >
@@ -32,7 +32,7 @@ export default function About() {
           className="block p-1.5 rounded-full text-white bg-[#171515] transition-opacity hover:opacity-75"
           target="_blank"
           title="Github"
-          href="https://github.com/iamzhiyudong"
+          href="https://github.com/iizyd"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
