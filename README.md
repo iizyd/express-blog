@@ -3,7 +3,7 @@
 
 采用前后端分离方案实现，共分为3个小项目，分别为后台接口、后端管理、博客前端。
 
-还有另一个版本的配套后端项目，用`Go(Gin)` 实现，对应的仓库地址是 https://github.com/iizyd/gin-blog-demo
+还有另一个版本的配套后端项目，用`Go(Gin)` 实现，对应的仓库地址是 https://github.com/iizyd/gin-blog-demo ，接口一致
 
 ## 技术栈
 
