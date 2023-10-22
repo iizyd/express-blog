@@ -1,80 +1,80 @@
 <template>
-	<n-modal
-		v-model:show="show_modal"
-		preset="dialog"
-		:title="title"
-		:mask-closable="false"
-		positive-text="确认"
-		negative-text="取消"
-		@positive-click="onOK"
-		@close="onCancel"
-		@negative-click="onCancel"
-	>
-		<template #default>
-			<div class="main">
-				<n-scrollbar style="max-height: 80vh">
-					<n-form
-						ref="formRef"
-						:model="form"
-						:rules="rules"
-						label-placement="left"
-						label-width="auto"
-						require-mark-placement="right-hanging"
-						size="small"
-						:inline="false"
-					>
-						<n-form-item label="标题" path="title">
-							<n-input v-model:value="form.title" placeholder="标题" />
-						</n-form-item>
+  <n-modal
+    v-model:show="show_modal"
+    preset="dialog"
+    :title="title"
+    :mask-closable="false"
+    positive-text="确认"
+    negative-text="取消"
+    @positive-click="onOK"
+    @close="onCancel"
+    @negative-click="onCancel"
+  >
+    <template #default>
+      <div class="main">
+        <n-scrollbar style="max-height: 80vh">
+          <n-form
+            ref="formRef"
+            :model="form"
+            :rules="rules"
+            label-placement="left"
+            label-width="auto"
+            require-mark-placement="right-hanging"
+            size="small"
+            :inline="false"
+          >
+            <n-form-item label="标题" path="title">
+              <n-input v-model:value="form.title" placeholder="标题" />
+            </n-form-item>
 
-						<n-form-item label="描述" path="description">
-							<n-input
-								type="textarea"
-								v-model:value="form.description"
-								placeholder="描述"
-							/>
-						</n-form-item>
+            <n-form-item label="描述" path="description">
+              <n-input
+                type="textarea"
+                v-model:value="form.description"
+                placeholder="描述"
+              />
+            </n-form-item>
 
-						<n-form-item label="状态" path="published">
-							<n-switch v-model:value="form.published" />
-						</n-form-item>
+            <n-form-item label="状态" path="published">
+              <n-switch v-model:value="form.published" />
+            </n-form-item>
 
-						<n-form-item label="内容" path="content">
-							<md-editor
-								v-model="form.content"
-								:toolbarsExclude="['save', 'github']"
-								@on-upload-img="onUploadImg"
-							/>
-						</n-form-item>
+            <n-form-item label="内容" path="content">
+              <md-editor
+                v-model="form.content"
+                :toolbarsExclude="['save', 'github']"
+                @on-upload-img="onUploadImg"
+              />
+            </n-form-item>
 
-						<n-form-item label="封面图片">
-							<n-upload
-								action="http://127.0.0.1:9000"
-								:default-file-list="fileList"
-								list-type="image-card"
-								:custom-request="customUpload"
-								:max="1"
-								accept="image/png, image/jpeg"
-								@remove="onFileRemove"
-							>
-								上传文件
-							</n-upload>
-						</n-form-item>
+            <n-form-item label="封面图片">
+              <n-upload
+                action="http://127.0.0.1:9000"
+                :default-file-list="fileList"
+                list-type="image-card"
+                :custom-request="customUpload"
+                :max="1"
+                accept="image/png, image/jpeg"
+                @remove="onFileRemove"
+              >
+                上传文件
+              </n-upload>
+            </n-form-item>
 
-						<n-form-item label="标签" path="tag">
-							<n-select
-								v-model:value="form.tags"
-								multiple
-								:options="tags"
-								placeholder="选择标签"
-								clearable
-							/>
-						</n-form-item>
-					</n-form>
-				</n-scrollbar>
-			</div>
-		</template>
-	</n-modal>
+            <n-form-item label="标签" path="tag">
+              <n-select
+                v-model:value="form.tags"
+                multiple
+                :options="tags"
+                placeholder="选择标签"
+                clearable
+              />
+            </n-form-item>
+          </n-form>
+        </n-scrollbar>
+      </div>
+    </template>
+  </n-modal>
 </template>
 
 <script lang="ts" setup>
@@ -104,13 +104,13 @@ const props = withDefaults(
     show_modal: boolean;
     article_id: number;
     modal_type: "new" | "edit";
-    tags: { label: string; value: number}[]
+    tags: { label: string; value: number }[];
   }>(),
   {
     show_modal: false,
     article_id: 0,
     modal_type: "new",
-    tags: () => ([])
+    tags: () => [],
   }
 );
 const { show_modal, article_id, modal_type, tags } = toRefs(props);
@@ -165,7 +165,7 @@ const resetForm = () => {
   form.content = "";
   form.cover_image_url = "";
   form.modified_at = "zz";
-  form.tags = []
+  form.tags = [];
 
   fileList.value = [];
 };
@@ -281,7 +281,13 @@ const getArticleInfo = async () => {
     form.cover_image_url = data.cover_image_url;
     form.modified_at = data.modified_by || "zz";
 
-    form.tags = data.tags
+    if (data.tags && typeof data.tags[0] === "object") {
+      form.tags = (data.tags as { id: number; name: string }[]).map(
+        (item) => item.id
+      );
+    } else {
+      form.tags = data.tags;
+    }
 
     if (data.cover_image_url) {
       fileList.value[0] = {
@@ -297,7 +303,7 @@ const getArticleInfo = async () => {
 // 修改文章
 const updateArticle = async () => {
   const res = await apis.updateArticle(article_id.value, {
-    ...form
+    ...form,
   });
 
   return Promise.resolve(res.code === 200);
@@ -306,7 +312,7 @@ const updateArticle = async () => {
 // 创建文章
 const createArticle = async () => {
   const res = await apis.createArticle({
-    ...form
+    ...form,
   });
 
   return Promise.resolve(res.code === 200);

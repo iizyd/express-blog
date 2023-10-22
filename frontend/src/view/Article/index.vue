@@ -1,31 +1,31 @@
 <template>
-	<div class="article-wrap">
-		<n-space vertical>
-			<n-button type="primary" @click="onCreate">添 加</n-button>
+  <div class="article-wrap">
+    <n-space vertical>
+      <n-button type="primary" @click="onCreate">添 加</n-button>
 
-			<n-data-table
-				remote
-				bordered
-				ref="table"
-				:columns="columns"
-				:data="data"
-				:loading="loading"
-				:pagination="pagination"
-				:row-key="rowKey"
-				@update:page="handlePageChange"
-				flex-height
-				:style="{ height: 'calc(100vh - 85px - 34px)' }"
-			/>
+      <n-data-table
+        remote
+        bordered
+        ref="table"
+        :columns="columns"
+        :data="data"
+        :loading="loading"
+        :pagination="pagination"
+        :row-key="rowKey"
+        @update:page="handlePageChange"
+        flex-height
+        :style="{ height: 'calc(100vh - 85px - 34px)' }"
+      />
 
-			<Modal
-				v-model:show_modal="show_modal"
-				:article_id="article_id"
-				:modal_type="modal_type"
-				:tags="tag_list"
-				@refresh="getData"
-			/>
-		</n-space>
-	</div>
+      <Modal
+        v-model:show_modal="show_modal"
+        :article_id="article_id"
+        :modal_type="modal_type"
+        :tags="tag_list"
+        @refresh="getData"
+      />
+    </n-space>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -52,7 +52,7 @@ interface ArticleItem {
   modified_on: string;
   published: boolean;
   // tags: { id?: number; name?: string }[];
-  tags: number[];
+  tags: number[] | { id: number; name: string }[];
 }
 
 const message = useMessage();
@@ -140,7 +140,10 @@ const columns = ref([
               type: "info",
               size: "small",
             },
-            { default: () => tag_list.value.find((tag) => tag.value === tag_id)?.label }
+            {
+              default: () =>
+                tag_list.value.find((tag) => tag.value === tag_id)?.label,
+            }
           )
         ),
       ]);
@@ -242,6 +245,14 @@ const getData = async () => {
 
   if (res.code === 200) {
     data.value = res.data.data;
+
+    data.value.forEach((article) => {
+      if (typeof article.tags[0] === "object") {
+        article.tags = (article.tags as { id: number; name: string }[]).map(
+          (tag) => tag.id
+        );
+      }
+    });
     pagination.itemCount = res.data.total;
   }
 
@@ -267,7 +278,7 @@ const getTagList = async () => {
       }) || [];
   }
 };
-getTagList()
+getTagList();
 </script>
 
 <style lang="less" scoped>
