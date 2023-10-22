@@ -7,10 +7,10 @@ export interface ResData<T> {
 }
 
 export interface PageData<T> {
-  total: number
-  page: number
-  page_size: number
-  data: T
+  total: number;
+  page: number;
+  page_size: number;
+  data: T;
 }
 
 export const fetchData = async <T>(
@@ -23,7 +23,7 @@ export const fetchData = async <T>(
   }
 
   const url = `${BASE_URL}${path}?${queryItemArr.join("&")}`;
-  const response = await fetch(url);
+  const response = await fetch(url, { next: { revalidate: 60 * 5 } });
   const resData: ResData<T> = await response.json();
 
   return resData.data;
